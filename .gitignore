@@ -1,0 +1,4 @@
+# Don't sync the venv and other machine specific things.
+.venv/*
+.idea/*
+.python-version
