@@ -1,10 +1,10 @@
 from spiderweb import SpiderwebRouter
 from spiderweb.response import HttpResponse, TemplateResponse, RedirectResponse
 
-from src.database.db import ShortyDB
-from src.lib.encoder import encode_string
+from database.db import ShortyDB
+from lib.encoder import encode_string
 
-app = SpiderwebRouter(templates_dirs='templates')
+app = SpiderwebRouter(templates_dirs='src/templates')
 db = ShortyDB()
 
 
