@@ -2,3 +2,6 @@
 .venv/*
 .idea/*
 .python-version
+
+# Let's exclude the DB file for now.
+shorty.json
