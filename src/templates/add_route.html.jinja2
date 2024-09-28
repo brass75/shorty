@@ -3,6 +3,13 @@
     <title>Add a route</title>
 </head>
 <body>
+{% if error %}
+    <h1>{{ error }}</h1>
+    <p>{{ data }}</p>
+{% else %}
+    <h1>Welcome to Shorty! The URL Shortener</h1>
+{% endif %}
+<hr>
 <form method="post" action="/routes/v1/add">
     <p>What is the URL you want to add?<label>
         <input type="text" name="url_to_add" id="url_to_add">
