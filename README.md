@@ -30,3 +30,23 @@ Future plans:
 - Use an actual DB as a data store.
 - Add methods to see what URLs are stored.
 - Add a method for a custom short URL.
+
+## If you want to run this locally
+
+All you need to do is:
+
+```shell
+git clone git@github.com:brass75/shorty.git
+cd shorty
+uv run src/app.py
+```
+
+NOTE: This is my first time playing with `uv` as I noted above. You might need to run:
+
+```shell
+uc python install 3.12
+```
+
+before the `uv run` line (and you definitely need to install `uv` but I've linked to 
+them above so you can pick how you want to do it from there) to install the correct
+version of Python for the venv, but I'm not 100% sure.
