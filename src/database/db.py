@@ -18,7 +18,7 @@ class ShortyDB:
         :param file_store: Location for the file store
         """
         self._file_store = file_store or self.FILE_STORE
-        self._datastore = {'version' == self.__version__}
+        self._datastore = {'version': self.__version__}
         self._urls = {}
         try:
             with open(self._file_store) as f:
