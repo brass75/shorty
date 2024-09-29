@@ -1,0 +1,24 @@
+<html>
+<head>
+    <title>URL listings</title>
+</head>
+<body>
+<h1>URL Listings</h1>
+<table style="border: solid 2px black">
+    <thead>
+        <tr>
+            <td style="border: solid 1px aqua">Short link</td>
+            <td style="border: solid 1px aqua">URL</td>
+        </tr>
+    </thead>
+    <tbody>
+    {% for short, long in db %}
+    <tr>
+        <td style="border: solid 1px aqua"><a href="{{ prefix }}{{ short }}">{{ prefix }}{{ short }}</a> </td>
+        <td style="border: solid 1px aqua"><a href="{{ prefix }}{{ long }}">{{ prefix }}{{ long }}</a> </td>
+    </tr>
+    {%  endfor %}
+    </tbody>
+</table>
+</body>
+</html>

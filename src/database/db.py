@@ -97,4 +97,12 @@ class ShortyDB:
         if update_needed:
             self._store_db()
 
+    def items(self):
+        """
+        Return the items from the URLs
+
+        :return: dict_items from the URLs
+        """
+        return self._urls.items()
+
 

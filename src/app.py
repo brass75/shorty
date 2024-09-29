@@ -15,7 +15,6 @@ if os.getcwd().endswith('/src'):
     # paths in the code to work as expected.
     os.chdir('..')
 
-
 app = SpiderwebRouter(templates_dirs='src/templates')
 db = ShortyDB()
 
@@ -112,6 +111,24 @@ def http404(request: Request) -> TemplateResponse:
             'error': "Sorry! We couldn't find what you were looking for!",
             'data': f"We didn't recognize anything for {get_prefix(request.path)}{request.path}<br>"
                     f"Remember that shortened URLs are case sensitive.",
+        }
+    )
+
+
+@app.route('/get/urls', allowed_methods=['GET'])
+def get_urls(request: Request) -> TemplateResponse:
+    """
+    Return a table with all the shortened URLs
+
+    :param request: Request object
+    :return: TemplateResponse with the data needed
+    """
+    return TemplateResponse(
+        request,
+        'url_table.html.jinja2',
+        context={
+            'db': db.items(),
+            'prefix': get_prefix(request.path),
         }
     )
 
