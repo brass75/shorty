@@ -1,5 +1,9 @@
 # Shorty - The Spiderweb URL Shortener
 
+[![Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff)
+[![Actions status](https://github.com/brass75/shorty/workflows/CI/badge.svg)](https://github.com/astral-sh/ruff/actions)
+[![Mastodon Follow](https://img.shields.io/mastodon/follow/109552736199041636?domain=https%3A%2F%2Ftwit.social&style=flat)](https://twit.social/@brass75)
+
 My friend, [Joe Kaufeld](https://fosstodon.org/@itsthejoker) decided he wanted to
 understand how web frameworks actually work. So he wrote one. I decided I would be a 
 good guinea pig for it and that it would be a fun project for me to play with - and
