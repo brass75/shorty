@@ -24,12 +24,12 @@ Right now it:
 - Uses persistent storage (in the form of a JSON file.)
 - Gives an error on hash collision.
 - Redirects back to the add route page for an unknown short code.
+- Add methods to see what URLs are stored.
+- Add a method for a custom short URL.
 
 Future plans:
 - Handle hash collision.
 - Use an actual DB as a data store.
-- Add methods to see what URLs are stored.
-- Add a method for a custom short URL.
 
 ## If you want to run this locally
 
