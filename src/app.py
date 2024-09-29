@@ -1,7 +1,7 @@
 import json
 
 from spiderweb import SpiderwebRouter, Request
-from spiderweb.response import HttpResponse, TemplateResponse, RedirectResponse
+from spiderweb.response import TemplateResponse, RedirectResponse
 
 from database.db import ShortyDB
 from lib.encoder import encode_string
@@ -14,12 +14,14 @@ try:
     with open('config.json') as f:
         config = json.load(f)
 except Exception:
-    config = {
+    config = {'server': {
         'host': 'localhost',
         'port': 8000
+        }
     }
 
-PREFIX = f'{config.get('schema', 'http')}://{config['host']}:{config['port']}/'
+PREFIX = (f'{config.get('server', {}).get('schema', 'http')}://'
+          f'{config.get('server', {})['host']}:{config.get('server', {})['port']}/')
 
 
 def get_prefix(url: str) -> str:
@@ -54,7 +56,8 @@ def add(request: Request) -> TemplateResponse:
                         f"Please make sure to present a valid URL for shortening.",
             }
         )
-    encoded = encode_string(url_to_add)
+    if not (encoded := request.POST['custom_code'].strip()):
+        encoded = encode_string(url_to_add)
     prefix = get_prefix(request.path)
     try:
         db[encoded] = url_to_add
@@ -68,6 +71,7 @@ def add(request: Request) -> TemplateResponse:
                     'existing_url': existing,
                     'short_link': f'{prefix}{encoded}',
                     'failed': True,
+                    'encoded': encoded,
                 },
                 status_code=409
             )
@@ -77,6 +81,7 @@ def add(request: Request) -> TemplateResponse:
             'added_url': url_to_add,
             'short_link': f'{prefix}{encoded}',
             'success': True,
+            'encoded': encoded,
         }
     )
 

@@ -11,20 +11,26 @@
 {% endif %}
 <hr>
 <form method="post" action="/routes/v1/add">
-    <p>What is the URL you want to add?<label>
+    <p><label>What is the URL you want to add?
         <input type="text" name="url_to_add" id="url_to_add">
     </label></p>
+    <p><label>Specify a custom short code if you want to.
+        <input type="text" name="custom_code" id="custom_code">
+    </label></p>
     <p><input type="submit"></p>
-    {% if success %}
-        <hr>
-        <h1>Success!</h1>
-        <p>Added {{ added_url }}: Short link: <a href="{{ short_link }}">{{ short_link }}</a></p>
-    {% elif failed %}
-        <hr>
-        <h1>Sorry!</h1>
-        <p>It looks like there is a hash collision!</p>
-        <p>You asked to add: {{ added_url }} which would result in {{ short_link }} but that already goes to <a href="{{ existing_url }}">{{ existing_url }}</a> </p>
-    {% endif %}
 </form>
+{% if success %}
+    <hr>
+    <h1>Success!</h1>
+    <p>Added {{ added_url }}: Short link: <a href="{{ short_link }}">{{ short_link }}</a></p>
+{% elif failed %}
+    <hr>
+    <h1>Sorry!</h1>
+    <p>It looks like there is a hash collision!</p>
+    <p>You asked to add: {{ added_url }} which would result in {{ short_link }} but that already goes to <a href="{{ existing_url }}">{{ existing_url }}</a> </p>
+{% endif %}
+{% if encoded %}
+    <p>Please note that the short links that are generated are case-sensitive. {{ encoded }} is not the same as {{ encoded.lower() if encoded != encoded.lower() else encoded.upper() }}</p>
+{% endif %}
 </body>
 </html>
