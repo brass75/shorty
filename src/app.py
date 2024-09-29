@@ -22,14 +22,12 @@ try:
     with open('config.json') as f:
         config = json.load(f)
 except Exception:
-    config = {'server': {
-        'host': 'localhost',
-        'port': 8000
-        }
-    }
+    config = {'server': {'host': 'localhost', 'port': 8000}}
 
-PREFIX = (f'{config.get('server', {}).get('schema', 'http')}://'
-          f'{config.get('server', {})['host']}:{config.get('server', {})['port']}/')
+PREFIX = (
+    f'{config.get('server', {}).get('schema', 'http')}://'
+    f'{config.get('server', {})['host']}:{config.get('server', {})['port']}/'
+)
 
 
 def get_prefix(url: str) -> str:
@@ -43,7 +41,7 @@ def get_prefix(url: str) -> str:
     return (prefix + '/' if prefix and not prefix.endswith('/') else '') or PREFIX
 
 
-@app.route("/")
+@app.route('/')
 def index(request):
     return TemplateResponse(request, 'add_route.html.jinja2')
 
@@ -60,9 +58,9 @@ def add(request: Request) -> TemplateResponse:
             status_code=400,
             context={
                 'error': 'Invalid URL',
-                'data': f"{repr(url_to_add)} is not a valid URL. <br>"
-                        f"Please make sure to present a valid URL for shortening.",
-            }
+                'data': f'{repr(url_to_add)} is not a valid URL. <br>'
+                f'Please make sure to present a valid URL for shortening.',
+            },
         )
     if not (encoded := request.POST['custom_code'].strip()):
         encoded = encode_string(url_to_add)
@@ -81,16 +79,17 @@ def add(request: Request) -> TemplateResponse:
                     'failed': True,
                     'encoded': encoded,
                 },
-                status_code=409
+                status_code=409,
             )
     return TemplateResponse(
-        request, 'add_route.html.jinja2',
+        request,
+        'add_route.html.jinja2',
         context={
             'added_url': url_to_add,
             'short_link': f'{prefix}{encoded}',
             'success': True,
             'encoded': encoded,
-        }
+        },
     )
 
 
@@ -110,8 +109,8 @@ def http404(request: Request) -> TemplateResponse:
         context={
             'error': "Sorry! We couldn't find what you were looking for!",
             'data': f"We didn't recognize anything for {get_prefix(request.path)}{request.path}<br>"
-                    f"Remember that shortened URLs are case sensitive.",
-        }
+            f'Remember that shortened URLs are case sensitive.',
+        },
     )
 
 
@@ -129,9 +128,9 @@ def get_urls(request: Request) -> TemplateResponse:
         context={
             'db': db.items(),
             'prefix': get_prefix(request.path),
-        }
+        },
     )
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     app.start()

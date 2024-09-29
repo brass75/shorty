@@ -4,12 +4,13 @@ from typing import Any
 
 
 class ShortyDB:
-    """ Data handler class for shorty """
+    """Data handler class for shorty"""
+
     class ShortyDBError(Exception):
         pass
 
     FILE_STORE = 'shorty.json'
-    __version__ = "1.0"
+    __version__ = '1.0'
 
     def __init__(self, file_store: str = None):
         """
@@ -79,19 +80,16 @@ class ShortyDB:
         Updates the data store to the current version. Populates and variables in self.
         """
         update_needed = True
-        match (version := self._datastore.get('version')):
+        match version := self._datastore.get('version'):
             case self.__version__:
                 update_needed = False
             case None:
-                self._datastore = {
-                    'version': self.__version__,
-                    'urls': self._datastore
-                }
+                self._datastore = {'version': self.__version__, 'urls': self._datastore}
             case _:
                 print(f'Unknown data store {version=}')
                 self._datastore = {
                     'version': self.__version__,
-                    'urls': self._datastore.get('urls', {})
+                    'urls': self._datastore.get('urls', {}),
                 }
         self._urls = self._datastore.get('urls', {})
         if update_needed:
@@ -104,5 +102,3 @@ class ShortyDB:
         :return: dict_items from the URLs
         """
         return self._urls.items()
-
-
