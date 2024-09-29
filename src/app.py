@@ -6,6 +6,15 @@ from spiderweb.response import TemplateResponse, RedirectResponse
 from database.db import ShortyDB
 from lib.encoder import encode_string
 from lib.utils import get_url_prefix, validate_url
+import os
+
+if os.getcwd().endswith('/src'):
+    # The code assumes that the working directory is the root directory and that
+    # all the code and templates are in the src subdirectory. `gunicorn` expects
+    # to run from the src subdirectory so we need to go up a level for all the
+    # paths in the code to work as expected.
+    os.chdir('..')
+
 
 app = SpiderwebRouter(templates_dirs='src/templates')
 db = ShortyDB()
