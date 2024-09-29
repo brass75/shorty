@@ -7,7 +7,9 @@ URL_PATTERN = re.compile(
     r'localhost|'  # localhost...
     r'\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})'  # ...or ip
     r'(?::\d+)?'  # optional port
-    r'(?:/?|[/?]\S+)$', re.IGNORECASE)
+    r'(?:/?|[/?]\S+)$',
+    re.IGNORECASE,
+)
 
 
 def get_url_prefix(url: str) -> str:
