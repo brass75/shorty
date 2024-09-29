@@ -1,5 +1,5 @@
-from hashlib import sha256 as hash_method
 import base64
+from hashlib import shake_128 as hash_method
 
 
 def encode_string(s: str) -> str:
@@ -9,6 +9,7 @@ def encode_string(s: str) -> str:
     :param s: string to encode
     :return: encoded string
     """
-    csum = int.from_bytes(hash_method(s.encode()).digest()[:6])
-    encoded = base64.b64encode(csum.to_bytes(6)).decode().rstrip('=')
+    csum = hash_method(s.encode('utf-8'))
+    csum = int(csum.hexdigest(8), 16)
+    encoded = base64.b64encode(csum.to_bytes(8), b'_-').decode().rstrip('=')
     return encoded
