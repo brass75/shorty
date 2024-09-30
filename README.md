@@ -48,7 +48,7 @@ uv run src/app.py
 NOTE: This is my first time playing with `uv` as I noted above. You might need to run:
 
 ```shell
-uc python install 3.12
+uv python install 3.12
 ```
 
 before the `uv run` line (and you definitely need to install `uv` but I've linked to 
