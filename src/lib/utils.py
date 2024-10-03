@@ -1,5 +1,9 @@
+import os
 from urllib.parse import urlparse
 import re
+import logging
+
+logger = logging.getLogger('utils')
 
 URL_PATTERN = re.compile(
     r'^https?://'  # http:// or https://
@@ -34,3 +38,16 @@ def validate_url(url: str) -> bool:
     :return: If it passes muster
     """
     return url is not None and URL_PATTERN.search(url)
+
+
+def get_data_dir() -> str:
+    """
+    Dynamically figure out the path to the data directory
+
+    :return: path to the data directory
+    """
+    curr_dir = os.getcwd()
+    logger.warning(f'{curr_dir=}')
+    if curr_dir.endswith('/src'):
+        curr_dir = curr_dir.removesuffix('/src')
+    return os.path.join(curr_dir, 'data')

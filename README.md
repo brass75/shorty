@@ -1,5 +1,9 @@
 # Shorty - The Spiderweb URL Shortener
 
+[![Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff)
+[![Actions status](https://github.com/brass75/shorty/workflows/CI/badge.svg)](https://github.com/brass75/shorty/actions)
+[![Mastodon Follow](https://img.shields.io/mastodon/follow/109552736199041636?domain=https%3A%2F%2Ftwit.social&style=flat)](https://twit.social/@brass75)
+
 My friend, [Joe Kaufeld](https://fosstodon.org/@itsthejoker) decided he wanted to
 understand how web frameworks actually work. So he wrote one. I decided I would be a 
 good guinea pig for it and that it would be a fun project for me to play with - and
@@ -44,9 +48,26 @@ uv run src/app.py
 NOTE: This is my first time playing with `uv` as I noted above. You might need to run:
 
 ```shell
-uc python install 3.12
+uv python install 3.12
 ```
 
 before the `uv run` line (and you definitely need to install `uv` but I've linked to 
 them above so you can pick how you want to do it from there) to install the correct
 version of Python for the venv, but I'm not 100% sure.
+
+## Using Docker
+
+Support for Docker has been added.
+
+```shell
+docker compose up --build
+```
+
+The Docker container will mount ./data for persistent storage of config and the data store.
+You can also use this to update the templates without restarting by declaring an alternate path
+for the templates in the config file.
+
+The Docker implementation will bind to port 80 so simply going to http://localhost should be
+enough for initial access.
+
+
