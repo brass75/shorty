@@ -34,13 +34,16 @@ if template_dir := config.get('templates', ''):
 else:
     TEMPLATE_DIR = 'templates' if os.getcwd().endswith('/src') else 'src/templates'
 logger.warning(f'Templates at: {TEMPLATE_DIR=}')
+
+# Initialize the app
 app = SpiderwebRouter(templates_dirs=TEMPLATE_DIR)
+
+# Initialize the data store
 db = ShortyDB(path=DATA_DIR)
 
-PREFIX = (
-    f'{config.get('server', {}).get('schema', 'http')}://'
-    f'{config.get('server', {})['host']}:{config.get('server', {})['port']}/'
-)
+if (schema := config.get('server', {}).get('schema', 'http')) not in ['http', 'https']:
+    schema = 'http'
+PREFIX = f'{schema}://{config.get('server', {}).get('host', 'localhost')}:{config.get('server', {}).get('port', '')}/'
 
 
 def get_prefix(url: str) -> str:
