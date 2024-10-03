@@ -80,6 +80,7 @@ def add(request: Request) -> TemplateResponse:
         return TemplateResponse(request, 'add_route.html.jinja2')
     url_to_add = request.POST['url_to_add']
     if not validate_url(url_to_add):
+        logger.error(f'Failed to validate {url_to_add=}')
         return TemplateResponse(
             request,
             'add_route.html.jinja2',
@@ -97,6 +98,7 @@ def add(request: Request) -> TemplateResponse:
         db[encoded] = url_to_add
     except ShortyDB.ShortyDBError:
         if (existing := db[encoded]) != url_to_add:
+            logger.error(f'Hash collision on {url_to_add=} {existing=}')
             return TemplateResponse(
                 request,
                 'add_route.html.jinja2',
@@ -109,6 +111,7 @@ def add(request: Request) -> TemplateResponse:
                 },
                 status_code=409,
             )
+    logger.warning(f'URL Added: {url_to_add=} --> {prefix}{encoded}')
     return TemplateResponse(
         request,
         'add_route.html.jinja2',
