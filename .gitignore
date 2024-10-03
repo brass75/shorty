@@ -5,5 +5,6 @@
 __pycache__
 *.pyc
 
-# Let's exclude the DB file for now.
-shorty.json
+# Let's exclude the data files for now.
+data/*
+

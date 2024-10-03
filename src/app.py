@@ -1,28 +1,41 @@
 import json
+import logging
 
 from spiderweb import SpiderwebRouter, Request
 from spiderweb.response import TemplateResponse, RedirectResponse
 
 from database.db import ShortyDB
 from lib.encoder import encode_string
-from lib.utils import get_url_prefix, validate_url
+from lib.utils import get_url_prefix, validate_url, get_data_dir
 import os
 
-if os.getcwd().endswith('/src'):
-    # The code assumes that the working directory is the root directory and that
-    # all the code and templates are in the src subdirectory. `gunicorn` expects
-    # to run from the src subdirectory so we need to go up a level for all the
-    # paths in the code to work as expected.
-    os.chdir('..')
+logger = logging.getLogger('app')
 
-app = SpiderwebRouter(templates_dirs='src/templates')
-db = ShortyDB()
+
+DATA_DIR = get_data_dir()
+logger.warning(f'Using {DATA_DIR=}')
+if not os.path.exists(DATA_DIR):
+    os.mkdir(DATA_DIR)
+CONFIG_PATH = f'{DATA_DIR}/config.json'
+logger.warning(f'Using config from {CONFIG_PATH=}')
 
 try:
-    with open('config.json') as f:
+    with open(CONFIG_PATH) as f:
         config = json.load(f)
 except Exception:
+    logger.warning('Failed to load config. Using default.')
     config = {'server': {'host': 'localhost', 'port': 8000}}
+
+if template_dir := config.get('templates', ''):
+    if template_dir.startswith('data/'):
+        TEMPLATE_DIR = f'{DATA_DIR}/{template_dir.removeprefix('data/')}'
+    else:
+        TEMPLATE_DIR = template_dir
+else:
+    TEMPLATE_DIR = 'templates' if os.getcwd().endswith('/src') else 'src/templates'
+logger.warning(f'Templates at: {TEMPLATE_DIR=}')
+app = SpiderwebRouter(templates_dirs=TEMPLATE_DIR)
+db = ShortyDB(path=DATA_DIR)
 
 PREFIX = (
     f'{config.get('server', {}).get('schema', 'http')}://'
@@ -62,7 +75,7 @@ def add(request: Request) -> TemplateResponse:
                 f'Please make sure to present a valid URL for shortening.',
             },
         )
-    if not (encoded := request.POST['custom_code'].strip()):
+    if not (encoded := request.POST.get('custom_code', '').strip()):
         encoded = encode_string(url_to_add)
     prefix = get_prefix(request.path)
     try:
@@ -108,7 +121,7 @@ def http404(request: Request) -> TemplateResponse:
         status_code=404,
         context={
             'error': "Sorry! We couldn't find what you were looking for!",
-            'data': f"We didn't recognize anything for {get_prefix(request.path)}{request.path}<br>"
+            'data': f"We didn't recognize anything for {get_prefix(request.path).lstrip('/')}{request.path}<br>"
             f'Remember that shortened URLs are case sensitive.',
         },
     )

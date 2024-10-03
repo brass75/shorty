@@ -54,3 +54,20 @@ uv python install 3.12
 before the `uv run` line (and you definitely need to install `uv` but I've linked to 
 them above so you can pick how you want to do it from there) to install the correct
 version of Python for the venv, but I'm not 100% sure.
+
+## Using Docker
+
+Support for Docker has been added.
+
+```shell
+docker compose up --build
+```
+
+The Docker container will mount ./data for persistent storage of config and the data store.
+You can also use this to update the templates without restarting by declaring an alternate path
+for the templates in the config file.
+
+The Docker implementation will bind to port 80 so simply going to http://localhost should be
+enough for initial access.
+
+
