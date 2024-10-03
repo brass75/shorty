@@ -1,33 +1,43 @@
 import json
+import logging
 from json import JSONDecodeError
 from typing import Any
+import os
+from lib.utils import get_data_dir
 
 
 class ShortyDB:
-    """Data handler class for shorty"""
+    """Data handler class for src"""
 
     class ShortyDBError(Exception):
         pass
 
-    FILE_STORE = 'shorty.json'
+    FILE_STORE = f'{get_data_dir()}/shorty.json'
     __version__ = '1.0'
 
-    def __init__(self, file_store: str = None):
+    def __init__(self, file_store: str = None, path: str = None):
         """
         Initialize the data store
 
         :param file_store: Location for the file store
         """
-        self._file_store = file_store or self.FILE_STORE
+        self.logger = logging.getLogger('db')
+        if file_store:
+            self._file_store = file_store
+        else:
+            self._file_store = os.path.join(path, self.FILE_STORE) if path else self.FILE_STORE
         self._datastore = {'version': self.__version__}
         self._urls = {}
         try:
             with open(self._file_store) as f:
                 self._datastore = json.load(f)
         except FileNotFoundError:
-            print(f'No file found at {self._file_store} - initializing a new data store.')
+            self.logger.warning(f'No file found at {self._file_store} - initializing a new data store.')
         except JSONDecodeError as e:
-            print(f'Error parsing JSON in data store:\n{e.msg}')
+            self.logger.error(f'Error parsing JSON in data store:\n{e.msg}')
+        else:
+            self.logger.debug(f'Found db at {self._file_store}.')
+            self.logger.debug(json.dumps(self._datastore, indent=2))
         self._update_datastore()
 
     def get(self, key, default=None):
@@ -57,6 +67,7 @@ class ShortyDB:
         Update the persistent data store
         :return:
         """
+        self.logger.warning(f'Saving data store to {self._file_store=}')
         with open(self._file_store, 'w') as f:
             json.dump(self._datastore, f, indent=1)
 
