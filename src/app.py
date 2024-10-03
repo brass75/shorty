@@ -41,9 +41,21 @@ app = SpiderwebRouter(templates_dirs=TEMPLATE_DIR)
 # Initialize the data store
 db = ShortyDB(path=DATA_DIR)
 
-if (schema := config.get('server', {}).get('schema', 'http')) not in ['http', 'https']:
-    schema = 'http'
-PREFIX = f'{schema}://{config.get('server', {}).get('host', 'localhost')}:{config.get('server', {}).get('port', '')}/'
+
+def set_prefix(_config: dict) -> str:
+    """
+    Generate the prefix from the config
+
+    :param _config: The config
+    :return: URL prefix
+    """
+    if not (server := _config.get('server')):
+        return 'http://localhost:8000/'
+    if (schema := server.get('schema', 'http')) not in ['http', 'https']:
+        schema = 'http'
+    host = server.get('host', 'localhost')
+    port = server.get('port')
+    return f'{schema}://{host}{f':{port}' if port else ''}/'
 
 
 def get_prefix(url: str) -> str:
@@ -54,7 +66,7 @@ def get_prefix(url: str) -> str:
     :return: The prefix for the URL or the appropriately configured one
     """
     prefix = get_url_prefix(url)
-    return (prefix + '/' if prefix and not prefix.endswith('/') else '') or PREFIX
+    return (prefix + '/' if prefix and not prefix.endswith('/') else '') or set_prefix(config)
 
 
 @app.route('/')
