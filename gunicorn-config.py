@@ -14,3 +14,4 @@ bind = '0.0.0.0:8000'  # The IP:port to bind to. Using '0.0.0.0' says to accept 
 workers = 2  # The number of worker processes to run
 certfile = getattr(certs, 'certfile', None)  #
 keyfile = getattr(certs, 'keyfile', None)
+logger.info(f'Using {certfile=} {keyfile=}')
