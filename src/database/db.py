@@ -26,7 +26,7 @@ class ShortyDB:
             self._file_store = file_store
         else:
             self._file_store = os.path.join(path, self.FILE_STORE) if path else self.FILE_STORE
-        self._datastore = {'version': self.__version__}
+        self._datastore = {}
         self._urls = {}
         try:
             with open(self._file_store) as f:
