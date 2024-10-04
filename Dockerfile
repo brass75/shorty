@@ -31,6 +31,6 @@ ENV PATH="/app/.venv/bin:$PATH"
 # Reset the entrypoint, don't invoke `uv`
 ENTRYPOINT []
 
-WORKDIR /app/src
+RUN chmod 755 /app/run.sh
 
-CMD ls -l /app && gunicorn --workers=2 app:app --bind=0.0.0.0:8000
+CMD /app/run.sh

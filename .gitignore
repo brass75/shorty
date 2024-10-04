@@ -8,3 +8,5 @@ __pycache__
 # Let's exclude the data files for now.
 data/*
 
+certs/*
+
