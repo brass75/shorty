@@ -1,7 +1,11 @@
 import logging
 import os
+import sys
 
 logger = logging.getLogger('config')
+
+# Make sure the root directory is in the PYTHONPATH
+sys.path.append(os.getcwd().removesuffix('/src'))
 
 if os.path.exists('certs/certs.py'):
     # Since we don't want to have secrets in Git we'll import them from a separate directory.
